@@ -12,7 +12,7 @@ My Claude Code skills, packaged as a plugin marketplace.
 In Claude Code:
 
 ```
-/plugin marketplace add kevinschaich/kevinschaich-skills
+/plugin marketplace add kevinschaich/skills
 /plugin install kevinschaich-skills@kevinschaich-skills
 ```
 
