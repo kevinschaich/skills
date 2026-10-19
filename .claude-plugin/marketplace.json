@@ -1,0 +1,12 @@
+{
+  "name": "kevinschaich-skills",
+  "owner": { "name": "Kevin Schaich", "url": "https://github.com/kevinschaich" },
+  "plugins": [
+    {
+      "name": "kevinschaich-skills",
+      "source": "./",
+      "description": "fmk (decide by elimination) and reverse-engineer-anything (REA-driven reverse engineering).",
+      "version": "1.0.0"
+    }
+  ]
+}

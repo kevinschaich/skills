@@ -1,0 +1,9 @@
+{
+  "name": "kevinschaich-skills",
+  "version": "1.0.0",
+  "description": "Kevin Schaich's personal Claude Code skills: fmk and reverse-engineer-anything.",
+  "author": { "name": "Kevin Schaich", "url": "https://github.com/kevinschaich" },
+  "repository": "https://github.com/kevinschaich/kevinschaich-skills",
+  "license": "MIT",
+  "skills": "./skills/"
+}

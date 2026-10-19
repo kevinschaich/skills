@@ -1,0 +1,88 @@
+<!--
+/fmk round widget. Copy, then fill in:
+  1. One .c card per option inside #fmk-grid (keep data-i = 0..n-1, label = A..).
+  2. The OPTS array in the script: per option, `why` (guessed kill reasons) and `steal` (its distinct traits).
+Rules that keep it working in the chat widget host:
+  - Never rebuild controls with innerHTML after load. Every button exists in the static markup or is created ONCE at load.
+  - One delegated click listener on #fmk (the static root). State changes only toggle classes / text.
+Strip this comment before rendering (the widget host forbids HTML comments).
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap">
+<style>
+#fmk .g{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:10px}
+#fmk .c{border:0.5px solid var(--border);border-radius:12px;padding:6px;cursor:pointer;background:var(--surface-1);display:flex;flex-direction:column;box-shadow:inset 0 0 0 0 transparent}
+#fmk .c.sel{box-shadow:inset 0 0 0 1.5px var(--border-accent)}
+#fmk .m{min-height:var(--h,170px);flex:1;border-radius:8px;overflow:hidden;position:relative;box-sizing:border-box}
+#fmk .r{display:flex;justify-content:space-between;align-items:center;padding:8px 2px 2px;font-size:13px;line-height:1}
+#fmk .b{display:flex;gap:4px}
+#fmk button{display:inline-flex;align-items:center;justify-content:center;line-height:1;box-sizing:border-box}
+#fmk .b button{padding:0 9px;font-size:12px;min-height:0;height:24px}
+#fmk .on-k{background:var(--bg-danger)!important;color:var(--text-danger)!important}
+#fmk .on-m{background:var(--bg-success)!important;color:var(--text-success)!important}
+#fmk .on-f{background:var(--bg-accent)!important;color:var(--text-accent)!important}
+#fmk .row{display:none;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;font-size:13px;color:var(--text-secondary)}
+#fmk .row.show{display:flex}
+#fmk .chip{padding:0 10px;height:26px;min-height:0;font-size:12px}
+#fmk .chip.on{background:var(--bg-accent);color:var(--text-accent)}
+#fmk .oth{width:90px;height:26px;min-height:0;font-size:12px;box-sizing:border-box}
+</style>
+<div id="fmk">
+<h2 class="sr-only">Options for this round, each with fuck, marry and kill buttons.</h2>
+<div class="g" id="fmk-grid" style="--cols:3;--h:170px">
+  <div class="c" data-i="0"><div class="m">RENDER A</div><div class="r"><b style="font-weight:500">A</b> short name<div class="b"></div></div></div>
+  <div class="c" data-i="1"><div class="m">RENDER B</div><div class="r"><b style="font-weight:500">B</b> short name<div class="b"></div></div></div>
+</div>
+<div id="fmk-rows"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--text-muted)">
+  <span id="fmk-st">click F M K · keys: number selects, f m k assign, enter submits</span>
+  <span style="display:flex;gap:6px"><button data-act="freeze">Freeze married</button><button data-act="go">Next gen ↗</button></span>
+</div>
+<div id="fmk-err" style="font-size:13px;color:var(--text-danger);margin-top:4px"></div>
+</div>
+<script>
+const OPTS=[
+  {why:['cluttered','generic','loud'],steal:['trait one','trait two']},
+  {why:['boring','corporate'],steal:['trait three']}
+];
+const L='ABCDEFGH',root=document.getElementById('fmk'),cards=[...root.querySelectorAll('.c')],rows=document.getElementById('fmk-rows');
+const S={sel:0,kill:new Set(),m:null,f:null,why:{},steal:null};
+cards.forEach((c,i)=>{const b=c.querySelector('.b');['f','m','k'].forEach(r=>{const x=document.createElement('button');x.textContent=r.toUpperCase();x.dataset.role=r;x.dataset.i=i;b.appendChild(x)})});
+OPTS.forEach((o,i)=>{
+  const k=document.createElement('div');k.className='row';k.id='kr'+i;k.innerHTML='why '+L[i]+' dies:';
+  o.why.forEach(w=>{const x=document.createElement('button');x.className='chip';x.dataset.kw=w;x.dataset.i=i;x.textContent=w;k.appendChild(x)});
+  const ki=document.createElement('input');ki.className='oth';ki.placeholder='other';ki.dataset.ko=i;k.appendChild(ki);rows.appendChild(k);
+  const f=document.createElement('div');f.className='row';f.id='fr'+i;f.innerHTML='steal from '+L[i]+':';
+  o.steal.forEach(w=>{const x=document.createElement('button');x.className='chip';x.dataset.fw=w;x.dataset.i=i;x.textContent=w;f.appendChild(x)});
+  const fi=document.createElement('input');fi.className='oth';fi.placeholder='other';fi.dataset.fo=i;f.appendChild(fi);rows.appendChild(f);
+});
+function assign(r,i){
+  if(r==='k'){if(S.kill.has(i))S.kill.delete(i);else{S.kill.add(i);if(S.m===i)S.m=null;if(S.f===i)S.f=null}}
+  if(r==='m'){S.m=S.m===i?null:i;S.kill.delete(i);if(S.f===i)S.f=null}
+  if(r==='f'){S.f=S.f===i?null:i;S.kill.delete(i);if(S.m===i)S.m=null;S.steal=null}
+  draw()}
+function draw(){
+  cards.forEach((c,i)=>{c.classList.toggle('sel',i===S.sel);c.querySelectorAll('[data-role]').forEach(x=>{const r=x.dataset.role,on=r==='k'?S.kill.has(i):S[r]===i;x.className=on?'on-'+r:''})});
+  OPTS.forEach((o,i)=>{document.getElementById('kr'+i).classList.toggle('show',S.kill.has(i));document.getElementById('fr'+i).classList.toggle('show',S.f===i)});
+  root.querySelectorAll('[data-kw]').forEach(x=>x.classList.toggle('on',S.why[x.dataset.i]===x.dataset.kw));
+  root.querySelectorAll('[data-fw]').forEach(x=>x.classList.toggle('on',S.f==x.dataset.i&&S.steal===x.dataset.fw));
+  document.getElementById('fmk-err').textContent=''}
+function submit(){
+  if(!S.kill.size){document.getElementById('fmk-err').textContent='Kill at least one first.';return}
+  const ks=[...S.kill].sort().map(i=>{const t=root.querySelector('[data-ko="'+i+'"]').value.trim(),w=t||S.why[i];return L[i]+(w?' '+w:'')});
+  let s='K:'+ks.join(', ');if(S.m!==null)s+=' · M:'+L[S.m];
+  if(S.f!==null){const t=root.querySelector('[data-fo="'+S.f+'"]').value.trim(),w=t||S.steal;s+=' · F:'+L[S.f]+(w?' '+w:'')}
+  sendPrompt(s)}
+root.addEventListener('click',e=>{
+  const t=e.target.closest('button,.c');if(!t)return;
+  if(t.dataset.role){S.sel=+t.dataset.i;assign(t.dataset.role,+t.dataset.i);return}
+  if(t.dataset.kw){const i=t.dataset.i;S.why[i]=S.why[i]===t.dataset.kw?null:t.dataset.kw;draw();return}
+  if(t.dataset.fw){S.steal=S.steal===t.dataset.fw?null:t.dataset.fw;draw();return}
+  if(t.dataset.act==='go'){submit();return}
+  if(t.dataset.act==='freeze'){if(S.m===null){document.getElementById('fmk-err').textContent='Marry one first.';return}sendPrompt('freeze '+L[S.m]);return}
+  if(t.classList.contains('c')){S.sel=+t.dataset.i;draw()}});
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'){if(e.key==='Enter')submit();return}
+  const k=e.key.toLowerCase(),n=parseInt(k,10);
+  if(n>=1&&n<=cards.length){S.sel=n-1;draw()}else if(k==='f'||k==='m'||k==='k')assign(k,S.sel);else if(k==='enter')submit()});
+draw();
+</script>
