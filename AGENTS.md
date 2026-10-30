@@ -12,4 +12,4 @@ kevinschaich.com/project/skills/ renders the README.
 ## Approved exceptions
 
 - **Stack (Vite + React + TypeScript + Tailwind 4 + bun, Node 24):** this is a set of Markdown skills with no
-  web app, so the web stack, `vercel.json` and `engines` don't apply. Recorded 2026-10-29.
+  web app, so the web stack, `vercel.json` and `engines` don't apply. Approved by Kevin on 2026-10-29.
