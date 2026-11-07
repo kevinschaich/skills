@@ -21,6 +21,7 @@ Each skill is a short routine Claude loads when a task calls for it. User-invoke
 - [**optimize-perf**](skills/optimize-perf/SKILL.md): Makes one rendering feature of a real-time game (**turf**, **sand**, **trees**, **water**, **shadows**) run at **120 fps** while matching AAA visual quality. User-invoked.
 - [**optimize-fidelity**](skills/optimize-fidelity/SKILL.md): Raises one rendering feature of a real-time game to **AAA / Unreal Engine visual quality** while **holding 120 fps**. User-invoked.
 - [**visual-debug-loop**](skills/visual-debug-loop/SKILL.md): Debugs visual problems in **shaders**, **WebGPU/WebGL**, **games**, **canvas**, **CSS** and **charts** by building tools to **see**, **measure** and **hot-reload** them before fixing.
+- [**polish**](skills/polish/SKILL.md): Polishes an app until it holds up next to the **best products in its category**: **reference screenshots** first, **every state seeded**, every page and overlay shot in **both themes** and **three sizes**, critiqued against a fixed checklist, and **fixed and re-shot until a round finds nothing**. Works unattended and answers "are you proud of it?" honestly. User-invoked.
 - [**reference-driven-visual-fix**](skills/reference-driven-visual-fix/SKILL.md): Makes something look more like the real thing by pulling **5–10 Unsplash reference photos**, **measuring targets** from them and fixing against those numbers.
 
 ### Skills for finding images
