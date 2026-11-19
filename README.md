@@ -16,6 +16,10 @@ Each skill is a short routine Claude loads when a task calls for it. User-invoke
 - [**goal**](skills/goal/SKILL.md): Turns a **batch of prompts** or a stated outcome into a **checklist of goals** and works through them without stopping to check in, until **each one is verified**. User-invoked.
 - [**spec-audit-loop**](skills/spec-audit-loop/SKILL.md): Builds **numbered steps** from a source spec or proposal, then runs **strict audit-and-fix loops** until every item in the document is met.
 
+### Skills for setting Claude up
+
+- [**install-on-claude**](skills/install-on-claude/SKILL.md): Installs an **MCP server or plugin** in **every Claude on a Mac**: Claude Code, the Claude app signed in to claude.ai, and the app on **third-party inference** (Bedrock and the rest) with its managed-configuration rules. Edits the right files, keeps tokens in the **keychain**, verifies, and falls back to exact menu steps. User-invoked.
+
 ### Skills for games and visuals
 
 - [**optimize-perf**](skills/optimize-perf/SKILL.md): Makes one rendering feature of a real-time game (**turf**, **sand**, **trees**, **water**, **shadows**) run at **120 fps** while matching AAA visual quality. User-invoked.
